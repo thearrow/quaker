@@ -10,6 +10,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'mongoid', '~> 4', :github=>"mongoid/mongoid"
 gem 'slim'
 gem 'unicorn'
+gem 'unicorn-rails'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
@@ -27,3 +28,8 @@ group :test do
   gem 'email_spec'
   gem 'mongoid-rspec', '>= 1.6.0', :github=>"evansagge/mongoid-rspec"
 end
+
+
+# Heroku Gems
+gem 'rails_12factor', group: :production
+gem 'newrelic_rpm'
