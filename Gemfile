@@ -11,6 +11,10 @@ gem 'mongoid', '~> 4', :github=>"mongoid/mongoid"
 gem 'slim'
 gem 'unicorn'
 gem 'unicorn-rails'
+gem 'multi_json'
+gem 'oj'
+gem 'httparty'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]

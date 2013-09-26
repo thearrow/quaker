@@ -99,6 +99,9 @@ GEM
       haml (>= 4.0.0.rc.1)
       hpricot (~> 0.8.6)
       ruby_parser (~> 3.1.1)
+    httparty (0.11.0)
+      multi_json (~> 1.0)
+      multi_xml (>= 0.5.2)
     i18n (0.6.5)
     jbuilder (1.5.1)
       activesupport (>= 3.0.0)
@@ -119,9 +122,11 @@ GEM
       bson (~> 2.0.0.rc2)
       optionable (~> 0.1.1)
     multi_json (1.8.0)
+    multi_xml (0.5.5)
     newrelic_rpm (3.6.6.147)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
+    oj (2.1.4)
     optionable (0.1.1)
     origin (1.1.0)
     polyglot (0.3.3)
@@ -221,11 +226,14 @@ DEPENDENCIES
   haml-rails
   haml2slim
   html2haml
+  httparty
   jbuilder (~> 1.2)
   jquery-rails
   mongoid (~> 4)!
   mongoid-rspec (>= 1.6.0)!
+  multi_json
   newrelic_rpm
+  oj
   rails (= 4.0.0)
   rails_12factor
   rspec-rails
