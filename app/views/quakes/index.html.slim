@@ -1,0 +1,5 @@
+- unless @places.empty?
+  ol
+    - for place in @places do
+      li
+        | #{place['properties']['title']}
