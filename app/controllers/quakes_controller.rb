@@ -7,10 +7,19 @@ class QuakesController < ApplicationController
     json = params[:json] == 'true'
 
     x_days_ago = (DateTime.now - days.to_i.days).strftime('%Q')
-    @places = Place
-      .where("this.properties.time >= #{x_days_ago}")
-      .order_by("properties.mag DESC")
-      .limit(count)
+
+    if region
+      @places = Region
+        .where("this.properties.time >= #{x_days_ago}")
+        .order_by("properties.avg_mag DESC")
+        .limit(count)
+
+    else
+      @places = Place
+        .where("this.properties.time >= #{x_days_ago}")
+        .order_by("properties.mag DESC")
+        .limit(count)
+    end
 
     render json: MultiJson.dump(@places, :pretty => true) if json
   end

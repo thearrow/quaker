@@ -29,3 +29,7 @@ Behind-the-Scenes
   - Native 2dsphere [Geospatial Indexing](http://docs.mongodb.org/manual/applications/geospatial-indexes)
 - [USGS Earthquake API](http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php)
   - Currently updated daily at 1:00 via rake task `reload_data` (heroku scheduler)
+
+- Environment Variables:
+  - `USGS_API_URL=http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson`
+  - `REGION_RADIUS=40233.6` Default radius in meters for region creation (40233.6m = 25miles)
