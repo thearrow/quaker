@@ -2,7 +2,7 @@ class QuakesController < ApplicationController
 
   def index
     count = params[:count] || 10
-    days = params[:days].to_i || 10
+    days = (params[:days] || 10).to_i
     days = 30 if days > 30
     days = 1 if days < 1
     region = params[:region] == 'true'
