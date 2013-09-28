@@ -24,7 +24,7 @@ module USGS
       (1..30).each do |days| #data only goes back 30 days
         cutoff_time = (DateTime.now - days.to_i.days).strftime('%Q')
         #only calculate averages for quakes that themselves are within the cutoff
-        if place['properties']['time'] > cutoff_time.to_i
+        if place['properties']['time'] >= cutoff_time.to_i
           nearby_quakes = find_nearby_quakes(cutoff_time, place)
           avg_mag = average_magnitudes(nearby_quakes)
           region[:magnitudes][days] = avg_mag unless avg_mag.nil?

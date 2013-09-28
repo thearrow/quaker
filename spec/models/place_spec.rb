@@ -1,5 +1,8 @@
-require 'spec_helper'
+require_relative '../spec_helper'
 
 describe Place do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'should take dynamic attributes' do
+    Place.create({name: 'my place'})
+    Place.first[:name].should eq('my place')
+  end
 end
