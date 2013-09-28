@@ -21,7 +21,7 @@ module USGS
     total = Place.all.count
     Place.each do |place|
       region = init_region(place)
-      (1..30).each do |days|
+      (1..30).each do |days| #data only goes back 30 days
         cutoff_time = (DateTime.now - days.to_i.days).strftime('%Q')
         #only calculate averages for quakes that themselves are within the cutoff
         if place['properties']['time'] > cutoff_time.to_i
@@ -54,7 +54,7 @@ module USGS
     Place
       .where("this.properties.time >= #{cutoff_time}")
       .geo_near(place['geometry']).spherical
-      .max_distance(ENV['REGION_RADIUS'].to_f || 40233.6)
+      .max_distance(40233.6) #25 miles in meters
   end
 
   def average_magnitudes(nearby_quakes)
