@@ -27,7 +27,7 @@ module USGS
         if place['properties']['time'] >= cutoff_time.to_i
           nearby_quakes = find_nearby_quakes(cutoff_time, place)
           avg_mag = average_magnitudes(nearby_quakes)
-          region[:magnitudes][days] = avg_mag unless avg_mag.nil?
+          region[:magnitudes][days] = {mag: avg_mag, count: nearby_quakes.count} unless avg_mag.nil?
         end
       end
       count += 1
@@ -46,7 +46,8 @@ module USGS
                 place: place['properties']['place'],
                 time: place['properties']['time'],
             },
-        magnitudes: {}
+        magnitudes: {},
+        geometry: place['geometry']
     }
   end
 
