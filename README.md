@@ -12,6 +12,7 @@ Setup
 git clone git@github.com:thearrow/quaker.git
 cd quaker
 bundle install
+bundle exec rake reload_data
 rails s
 ```
 

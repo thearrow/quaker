@@ -1,10 +1,5 @@
 module USGS
 
-  def self.clear_database
-    Place.delete_all
-    Region.delete_all
-  end
-
   def self.create_places
     data = HTTParty.get(ENV['USGS_API_URL'])
     places = []
@@ -12,6 +7,7 @@ module USGS
       place['geometry']['coordinates'].pop #remove the altitude coordinate (not supported by Mongo)
       places << place
     end
+    Place.delete_all
     Place.create(places)
   end
 
@@ -34,6 +30,7 @@ module USGS
       p ((count.to_f/total.to_f)*100) #log % progress
       regions << region
     end
+    Region.delete_all
     Region.create(regions)
   end
 
