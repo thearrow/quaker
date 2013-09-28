@@ -229,7 +229,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 1.2)
   jquery-rails
-  mongoid (~> 4)!
+  mongoid!
   mongoid-rspec (>= 1.6.0)!
   multi_json
   newrelic_rpm

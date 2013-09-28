@@ -2,26 +2,33 @@ class QuakesController < ApplicationController
 
   def index
     count = params[:count] || 10
-    days = params[:days] || 10
+    days = params[:days].to_i || 10
+    days = 30 if days > 30
+    days = 1 if days < 1
     region = params[:region] == 'true'
-    json = params[:json] == 'true'
 
-    x_days_ago = (DateTime.now - days.to_i.days).strftime('%Q')
+    # Time for X days ago
+    cutoff_time = (DateTime.now - days.days).strftime('%Q')
 
     if region
-      @places = Region
-        .where("this.properties.time >= #{x_days_ago}")
-        .order_by("properties.avg_mag DESC")
+      regions = Region
+        .where("this.properties.time >= #{cutoff_time}")
+        .order_by("magnitudes.#{days} DESC")
         .limit(count)
 
+      @places = []
+      regions.each do |r|
+        r['properties']['title'] = "Avg M: #{r['magnitudes'][days.to_s].to_s} - #{r['properties']['place']}"
+        r['magnitudes'] = r['magnitudes'][days.to_s]
+        @places << r
+      end
     else
       @places = Place
-        .where("this.properties.time >= #{x_days_ago}")
+        .where("this.properties.time >= #{cutoff_time}")
         .order_by("properties.mag DESC")
         .limit(count)
     end
 
-    render json: MultiJson.dump(@places, :pretty => true) if json
+    render json: MultiJson.dump(@places, :pretty => true) if params[:format] == 'json'
   end
-
 end

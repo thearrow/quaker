@@ -7,7 +7,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
-gem 'mongoid', '~> 4', :github=>"mongoid/mongoid"
+gem 'mongoid', :github=>"mongoid/mongoid"
 gem 'slim'
 gem 'unicorn'
 gem 'unicorn-rails'

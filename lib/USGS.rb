@@ -1,54 +1,66 @@
 module USGS
 
-  def self.reload_data
-    clear_database
-    create_places
-    create_regions
-  end
-
-  private
-  def clear_database
+  def self.clear_database
     Place.delete_all
     Region.delete_all
   end
 
-  def create_places
+  def self.create_places
     data = HTTParty.get(ENV['USGS_API_URL'])
     places = []
     data['features'].each do |place|
-      place['geometry']['coordinates'].pop #remove the 'altitude' coordinate (not supported by Mongo)
+      place['geometry']['coordinates'].pop #remove the altitude coordinate (not supported by Mongo)
       places << place
     end
     Place.create(places)
   end
 
-  def create_regions
-    #region calculation currently uses places from all 30 days...
-    #eventually need to only use places within the past X days
+  def self.create_regions
     regions = []
+    count = 0
+    total = Place.all.count
     Place.each do |place|
-      nearby_quakes = Place
-        .geo_near(place['geometry']['coordinates']).spherical
-        .max_distance(ENV['REGION_RADIUS'] || 40233.6)
-
-      total_mag = 0.0
-      total_quakes = 0.0
-      nearby_quakes.each do |q|
-        total_mag += q['properties']['mag']
-        total_quakes += 1.0
+      region = init_region(place)
+      (1..30).each do |days|
+        cutoff_time = (DateTime.now - days.to_i.days).strftime('%Q')
+        #only calculate averages for quakes that themselves are within the cutoff
+        if place['properties']['time'] > cutoff_time.to_i
+          nearby_quakes = find_nearby_quakes(cutoff_time, place)
+          avg_mag = average_magnitudes(nearby_quakes)
+          region[:magnitudes][days] = avg_mag unless avg_mag.nil?
+        end
       end
-      avg_mag = total_mag.to_f / total_quakes.to_f
-
-      regions << {
-          id: place['id'],
-          properties: {
-              place: place['properties']['place'],
-              time: place['properties']['time'],
-              avg_mag: avg_mag,
-              title: avg_mag.to_s + ' - ' + place['properties']['place']}
-      }
+      count += 1
+      p ((count.to_f/total.to_f)*100) #log % progress
+      regions << region
     end
     Region.create(regions)
+  end
+
+  private
+  def init_region(place)
+    {
+        id: place['id'],
+        properties:
+            {
+                place: place['properties']['place'],
+                time: place['properties']['time'],
+            },
+        magnitudes: {}
+    }
+  end
+
+  def find_nearby_quakes(cutoff_time, place)
+    Place
+      .where("this.properties.time >= #{cutoff_time}")
+      .geo_near(place['geometry']).spherical
+      .max_distance(ENV['REGION_RADIUS'].to_f || 40233.6)
+  end
+
+  def average_magnitudes(nearby_quakes)
+    return nil if nearby_quakes.empty?
+    magnitudes = nearby_quakes.collect {|q| q['properties']['mag']}
+    magnitudes.inject(:+) / magnitudes.size.to_f
   end
 
 end
