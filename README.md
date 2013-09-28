@@ -6,9 +6,18 @@ QuakerJake
 An Earthquake Information application that provides a public HTTP interface.
 
 
+Setup
+-----
+```
+git clone git@github.com:thearrow/quaker.git
+cd quaker
+bundle install
+rails s
+```
+
+
 Usage
 -----
-
 ####`GET /quakes<.json>?<params>`
 Displays an html list or json output of the highest-magnitude quakes or most-dangerous regions.
 ```
@@ -24,12 +33,11 @@ Examples:
 - `/quakes.json?region=true` Return the (10) most-dangerous 'regions' (from past 10 days) in JSON
   - (A 'region' is defined as the 25-mile radius surrounding an individual quake.)
 
-
 ####`GET /vis`
 Displays a Google Geochart visualization of the 100 most-dangerous regions from the past 30 days.
 
 
-Behind-the-Scenes
+Info
 -----
 - Ruby on Rails
   - Environment Variables:
