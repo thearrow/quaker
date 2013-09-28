@@ -10604,6 +10604,38 @@ if ( typeof module === "object" && module && typeof module.exports === "object" 
   };
 
 }).call(this);
+(function() {
+
+
+}).call(this);
+(function() {
+  var drawMarkersMap;
+
+  drawMarkersMap = function() {
+    var quakes;
+    quakes = [];
+    return $.get('/quakes.json?days=30&count=100&region=true&vis=true').done(function(q) {
+      var chart, data, options;
+      quakes = q;
+      data = google.visualization.arrayToDataTable(quakes);
+      options = {
+        displayMode: "markers",
+        colorAxis: {
+          colors: ["yellow", "red"]
+        }
+      };
+      chart = new google.visualization.GeoChart(document.getElementById("chart_div"));
+      return chart.draw(data, options);
+    });
+  };
+
+  google.load("visualization", "1", {
+    packages: ["geochart"]
+  });
+
+  google.setOnLoadCallback(drawMarkersMap);
+
+}).call(this);
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
 //
