@@ -6,8 +6,8 @@ task :reload_data => :environment do
   puts "Updating earthquakes from USGS..."
   puts "Removing old indexes..."
   Rake::Task["db:mongoid:remove_indexes"].execute
-  puts "Downloading data & creating places..."
-  USGS.create_places
+  puts "Downloading data & creating quakes..."
+  USGS.create_quakes
   puts "Creating MongoDB indexes..."
   Rake::Task["db:mongoid:create_indexes"].execute
   puts "Creating regions..."

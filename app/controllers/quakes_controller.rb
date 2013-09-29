@@ -18,19 +18,19 @@ class QuakesController < ApplicationController
         .limit(count)
       vis ? create_vis_output(days, regions) : create_output(days, regions)
     else
-      @places = Place
+      @quakes = Quake
         .where("this.properties.time >= #{cutoff_time}")
         .order_by("properties.mag DESC")
         .limit(count)
     end
 
-    render json: MultiJson.dump(@places, :pretty => true) if params[:format] == 'json'
+    render json: MultiJson.dump(@quakes, :pretty => true) if params[:format] == 'json'
   end
 
   private
   def create_vis_output(days, regions)
-    @places = []
-    @places << ['Lat', 'Long', 'Avg. Magnitude', '# Quakes']
+    @quakes = []
+    @quakes << ['Lat', 'Long', 'Avg. Magnitude', '# Quakes']
     regions.each do |r|
       formatted_region = [
           r['geometry']['coordinates'][1],
@@ -38,16 +38,16 @@ class QuakesController < ApplicationController
           r['magnitudes'][days.to_s]['mag'],
           r['magnitudes'][days.to_s]['count']
       ]
-      @places << formatted_region
+      @quakes << formatted_region
     end
   end
 
   def create_output(days, regions)
-    @places = []
-    regions.each do |r|
-      r['properties']['title'] = "Avg M: #{r['magnitudes'][days.to_s]['mag'].to_s} - #{r['properties']['place']}"
-      r['magnitudes'] = r['magnitudes'][days.to_s]
-      @places << r
+    @quakes = []
+    regions.each do |region|
+      region['properties']['title'] = "Avg M: #{region['magnitudes'][days.to_s]['mag'].to_s} - #{region['properties']['place']}"
+      region['magnitudes'] = region['magnitudes'][days.to_s]
+      @quakes << region
     end
   end
 end
