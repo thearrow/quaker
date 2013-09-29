@@ -6,13 +6,13 @@ module USGS
   # Downloads info from USGS and creates Quake objects
   def self.create_quakes
     data = HTTParty.get(ENV['USGS_API_URL'])
-    places = []
-    data['features'].each do |place|
-      place['geometry']['coordinates'].pop #remove the altitude coordinate (not supported by Mongo)
-      places << place
+    quakes = []
+    data['features'].each do |quake|
+      quake['geometry']['coordinates'].pop #remove the altitude coordinate (not supported by Mongo)
+      quakes << quake
     end
     Quake.delete_all
-    Quake.create(places)
+    Quake.create(quakes)
   end
 
   # Creates one Region per Quake with average magnitudes and counts
@@ -21,7 +21,7 @@ module USGS
     count = 0
     total = Quake.all.count
     Quake.each do |quake|
-      region = Region.init_from_place(quake)
+      region = Region.init_from_quake(quake)
       (1..30).each do |days| #data only goes back 30 days
         cutoff_time = (DateTime.now - days.to_i.days).strftime('%Q')
         #only calculate averages for quakes that themselves are within the cutoff

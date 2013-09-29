@@ -6,17 +6,17 @@ class Region
   include Mongoid::Document
   include Mongoid::Attributes::Dynamic
 
-  # returns a skeleton region hash from place information
-  def self.init_from_place(place)
+  # returns a skeleton region hash from quake information
+  def self.init_from_quake(quake)
     {
-        id: place['id'],
+        id: quake['id'],
         properties:
             {
-                place: place['properties']['place'],
-                time: place['properties']['time'],
+                place: quake['properties']['place'],
+                time: quake['properties']['time'],
             },
         magnitudes: {},
-        geometry: place['geometry']
+        geometry: quake['geometry']
     }
   end
 end
