@@ -8,7 +8,7 @@ class QuakesController < ApplicationController
     region = params[:region] == 'true'
     vis = params[:vis] == 'true'
 
-    # Time for X days ago
+    # Time for {days} days ago
     cutoff_time = (DateTime.now - days.days).strftime('%Q')
 
     if region
@@ -28,6 +28,7 @@ class QuakesController < ApplicationController
   end
 
   private
+  # create json array output for use in the Geochart visualization
   def create_vis_output(days, regions)
     @quakes = []
     @quakes << ['Lat', 'Long', 'Avg. Magnitude', '# Quakes']
@@ -42,6 +43,7 @@ class QuakesController < ApplicationController
     end
   end
 
+  #create normal output for use in html and json
   def create_output(days, regions)
     @quakes = []
     regions.each do |region|

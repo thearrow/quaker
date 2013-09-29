@@ -1,5 +1,9 @@
+# Responsible for downloading the quake info from USGS
+# and creating Quakes and Regions
+
 module USGS
 
+  # Downloads info from USGS and creates Quake objects
   def self.create_quakes
     data = HTTParty.get(ENV['USGS_API_URL'])
     places = []
@@ -11,6 +15,7 @@ module USGS
     Quake.create(places)
   end
 
+  # Creates one Region per Quake with average magnitudes and counts
   def self.create_regions
     regions = []
     count = 0
@@ -35,5 +40,4 @@ module USGS
     Region.delete_all
     Region.create(regions)
   end
-
 end
