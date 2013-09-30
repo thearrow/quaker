@@ -3,9 +3,8 @@ require 'USGS'
 include USGS
 
 describe USGS do
-
   it 'should download and create places' do
     USGS.create_quakes
-    Quake.count.should >=(1)
+    expect(Quake.count).to be >= 1
   end
 end
