@@ -34,7 +34,7 @@ Examples:
 - `/quakes.json?region=true` Return the (10) most-dangerous 'regions' (from past 10 days) in JSON
   - (A 'region' is defined as the 25-mile radius surrounding an individual quake.)
 
-####`GET /vis`
+####`GET /quakes/vis`
 Displays a Google Geochart visualization of the 100 most-dangerous regions from the past 30 days.
 
 

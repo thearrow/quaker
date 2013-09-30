@@ -27,6 +27,10 @@ class QuakesController < ApplicationController
     render json: MultiJson.dump(@quakes, :pretty => true) if params[:format] == 'json'
   end
 
+  def vis
+
+  end
+
   private
   # create json array output for use in the Geochart visualization
   def create_vis_output(days, regions)
