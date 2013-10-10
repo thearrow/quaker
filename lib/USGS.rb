@@ -5,7 +5,7 @@ module USGS
 
   # Downloads info from USGS and creates Quake objects
   def self.create_quakes
-    data = HTTParty.get(ENV['USGS_API_URL'])
+    data = HTTParty.get(USGS_CONFIG['url'])
     quakes = []
     data['features'].each do |quake|
       quake['geometry']['coordinates'].pop #remove the altitude coordinate (not supported by Mongo)

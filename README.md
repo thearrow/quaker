@@ -41,8 +41,6 @@ Displays a Google Geochart visualization of the 100 most-dangerous regions from 
 Info
 -----
 - Ruby on Rails
-  - Environment Variables:
-    - `USGS_API_URL=http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson`
 
 - MongoDB
   - [Mongoid ODM](http://mongoid.org)
@@ -51,6 +49,7 @@ Info
 - [USGS Earthquake API](http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php)
   - Currently updated daily at 1:00 via rake task `reload_data` (heroku scheduler)
   - Can be updated manually by running `heroku run rake reload_data`
+  - URL configured in `/config/USGS.yml`
 
 - [Google Geochart Visualization](https://developers.google.com/chart/interactive/docs/gallery/geochart)
   - Marker size represents number of quakes in the region, color represents average magnitude.
