@@ -19,4 +19,16 @@ class Region
         geometry: quake['geometry']
     }
   end
+
+  # return a simple array of lat, lng, avg magnitude, quake count
+  # for use in the Google Geochart visualization
+  # see vis.json.jbuilder
+  def vis_output(days)
+    [
+        self['geometry']['coordinates'][1],
+        self['geometry']['coordinates'][0],
+        self['magnitudes'][days.to_s]['mag'],
+        self['magnitudes'][days.to_s]['count']
+    ]
+  end
 end

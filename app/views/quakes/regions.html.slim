@@ -1,0 +1,5 @@
+- unless @regions.empty?
+  ol
+    - for region in @regions do
+      li
+        | #{region['properties']['title']}

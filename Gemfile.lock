@@ -227,7 +227,7 @@ DEPENDENCIES
   haml2slim
   html2haml
   httparty
-  jbuilder (~> 1.2)
+  jbuilder
   jquery-rails
   mongoid!
   mongoid-rspec (>= 1.6.0)!

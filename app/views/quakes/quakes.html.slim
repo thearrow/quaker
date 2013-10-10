@@ -1,0 +1,5 @@
+- unless @quakes.empty?
+  ol
+    - for quake in @quakes do
+      li
+        | #{quake['properties']['title']}

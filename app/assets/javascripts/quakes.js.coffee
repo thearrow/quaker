@@ -1,6 +1,6 @@
 drawMarkersMap = ->
   quakes = []
-  $.get('/quakes.json?days=30&count=100&region=true&vis=true').done (q) ->
+  $.get('/quakes/vis.json?days=30&count=100').done (q) ->
     quakes = q
     data = google.visualization.arrayToDataTable(quakes)
     options =

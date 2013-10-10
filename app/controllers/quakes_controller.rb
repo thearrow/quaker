@@ -1,59 +1,40 @@
 class QuakesController < ApplicationController
+  before_filter :parse_params
 
-  def index
-    count = params[:count] || 10
-    days = (params[:days] || 10).to_i
-    days = 30 if days > 30
-    days = 1 if days < 1
-    region = params[:region] == 'true'
-    vis = params[:vis] == 'true'
+  def quakes
+    @quakes = Quake
+      .where("this.properties.time >= #{get_cutoff_time}")
+      .order_by("properties.mag DESC")
+      .limit(@count)
+  end
 
-    # Time for {days} days ago
-    cutoff_time = (DateTime.now - days.days).strftime('%Q')
-
-    if region
-      regions = Region
-        .where("this.properties.time >= #{cutoff_time}")
-        .order_by("magnitudes.#{days} DESC")
-        .limit(count)
-      vis ? create_vis_output(days, regions) : create_output(days, regions)
-    else
-      @quakes = Quake
-        .where("this.properties.time >= #{cutoff_time}")
-        .order_by("properties.mag DESC")
-        .limit(count)
-    end
-
-    render json: MultiJson.dump(@quakes, :pretty => true) if params[:format] == 'json'
+  def regions
+    @regions = find_regions()
   end
 
   def vis
-
+    @regions = find_regions()
   end
+
 
   private
-  # create json array output for use in the Geochart visualization
-  def create_vis_output(days, regions)
-    @quakes = []
-    @quakes << ['Lat', 'Long', 'Avg. Magnitude', '# Quakes']
-    regions.each do |r|
-      formatted_region = [
-          r['geometry']['coordinates'][1],
-          r['geometry']['coordinates'][0],
-          r['magnitudes'][days.to_s]['mag'],
-          r['magnitudes'][days.to_s]['count']
-      ]
-      @quakes << formatted_region
-    end
+  def parse_params
+    @count = params[:count] || 10
+    @days = (params[:days] || 10).to_i
+    @days = 30 if @days > 30
+    @days = 1 if @days < 1
   end
 
-  #create normal output for use in html and json
-  def create_output(days, regions)
-    @quakes = []
-    regions.each do |region|
-      region['properties']['title'] = "Avg M: #{region['magnitudes'][days.to_s]['mag'].to_s} - #{region['properties']['place']}"
-      region['magnitudes'] = region['magnitudes'][days.to_s]
-      @quakes << region
-    end
+  # returns a string representing the time for {days} days ago
+  # (milliseconds since epoch)
+  def get_cutoff_time
+    (DateTime.now - @days.days).strftime('%Q')
+  end
+
+  def find_regions
+    Region
+    .where("this.properties.time >= #{get_cutoff_time}")
+    .order_by("magnitudes.#{@days} DESC")
+    .limit(@count)
   end
 end
