@@ -1,8 +1,6 @@
 QuakerJake
 =====
 
-[quakerjake.herokuapp.com](http://quakerjake.herokuapp.com)
-
 An Earthquake Information application that provides a public HTTP interface.
 
 
@@ -37,6 +35,8 @@ Examples:
 ####`GET /quakes/vis`
 Displays a Google Geochart visualization of the 100 most-dangerous regions from the past 30 days.
 
+![Visualization Example](http://i.imgur.com/EafNrFD.png "Visualization Example")
+
 
 Info
 -----
@@ -47,7 +47,7 @@ Info
   - [2dsphere Geospatial Indexing](http://docs.mongodb.org/manual/applications/geospatial-indexes)
 
 - [USGS Earthquake API](http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php)
-  - Currently updated daily at 1:00 via rake task `reload_data` (heroku scheduler)
+  - Schedule updates via rake task `reload_data` (via heroku scheduler)
   - Can be updated manually by running `heroku run rake reload_data`
   - URL configured in `/config/USGS.yml`
 
